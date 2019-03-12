@@ -116,7 +116,7 @@ def generate_upload_apk_nimbledroid_task(dependencies):
                  ' && ./gradlew --no-daemon clean assembleRelease'
                  ' && python automation/taskcluster/tools/upload_apk_nimbledroid.py'),
         dependencies= dependencies,
-        scopes=['secrets:get:project/focus/nimbledroid'],
+        scopes=['secrets:get:project/mobile/reference-browser/nimbledroid'],
 )
 
 

@@ -40,7 +40,7 @@ def uploadGeckoViewExampleApk(key):
 
 # Get JSON data from taskcluster secrets service
 secrets = taskcluster.Secrets({'baseUrl': 'http://taskcluster/secrets/v1'})
-data = secrets.get('project/focus/nimbledroid')
+data = secrets.get('project/mobile/reference-browser/nimbledroid')
 
 # disable focus webview upload until https://github.com/mozilla-mobile/focus-android/issues/3574 is resolved
 rb_file = {'apk': open('geckoNightlyX86/release/app-geckoNightly-x86-release-unsigned.apk')}
