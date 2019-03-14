@@ -136,7 +136,7 @@ class TaskBuilder(object):
         deadline = taskcluster.fromNow('1 day')
 
         return {
-            "workerType": '"github-worker"',
+            "workerType": 'github-worker',
             "taskGroupId": self.task_id,
             "schedulerId": self.scheduler_id,
             "expires": taskcluster.stringDate(expires),
@@ -150,7 +150,7 @@ class TaskBuilder(object):
             "scopes": [],
             "requires": 'all-completed',
             "payload": {
-                "features": features,
+                "features": {},
                 "maxRunTime": 7200,
                 "image": "mozillamobile/android-components:1.15",
                 "command": [
@@ -159,7 +159,7 @@ class TaskBuilder(object):
                     "-cx",
                     command
                 ],
-                "artifacts": artifacts,
+                "artifacts": {},
                 "deadline": taskcluster.stringDate(deadline)
             },
             "provisionerId": 'aws-provisioner-v1',
@@ -177,7 +177,7 @@ class TaskBuilder(object):
         deadline = taskcluster.fromNow('1 day')
 
         return {
-            "workerType": '"github-worker"',
+            "workerType": 'github-worker',
             "taskGroupId": self.task_id,
             "schedulerId": self.scheduler_id,
             "expires": taskcluster.stringDate(expires),
@@ -191,7 +191,7 @@ class TaskBuilder(object):
             "scopes": scopes,
             "requires": 'all-completed',
             "payload": {
-                "features": features,
+                "features": {},
                 "maxRunTime": 7200,
                 "image": "mozillamobile/android-components:1.15",
                 "command": [
@@ -200,7 +200,7 @@ class TaskBuilder(object):
                     "-cx",
                     command
                 ],
-                "artifacts": artifacts,
+                "artifacts": {},
                 "deadline": taskcluster.stringDate(deadline)
             },
             "provisionerId": 'aws-provisioner-v1',

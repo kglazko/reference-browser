@@ -47,24 +47,14 @@ tasks:
     $let:
       decision_worker_type:
         $if: 'is_repo_trusted'
-        then: mobile-3-decision
-        else: mobile-1-decision
+        then: github-worker
+        else: github-worker
 
       build_worker_type:
         $if: 'is_repo_trusted'
-        then: mobile-3-b-ref-browser
-        else: mobile-1-b-ref-browser
+        then: github-worker
+        else: github-worker
 
-      tasks_priority:
-          $if: 'is_repo_trusted'
-          then:
-            $if: 'tasks_for == "github-release"'
-            then: highest
-            else:
-              $if: 'tasks_for == "cron"'
-              then: high
-              else: medium
-          else: lowest
     in:
       $let:
         default_task_definition:
@@ -75,16 +65,13 @@ tasks:
           deadline: {$fromNow: '2 hours'}
           expires: ${expires_in}
           provisionerId: aws-provisioner-v1
-          workerType: ${decision_worker_type}
-          priority: ${tasks_priority}
-          requires: all-completed   # Must be explicit because of Chain of Trust
+          workerType: github-worker
           retries: 5
           scopes:
-            - queue:create-task:${tasks_priority}:aws-provisioner-v1/${build_worker_type}
-            - queue:route:statuses
-            - queue:scheduler-id:${scheduler_id}
+            - queue:create-task:aws-provisioner-v1/github-worker
+            - queue:scheduler-id:taskcluster-github
           routes:
-            - statuses  # Automatically added by taskcluster-github. It must be explicit because of Chain of Trust
+            #- statuses  # Automatically added by taskcluster-github. It must be explicit because of Chain of Trust
           payload:
             maxRunTime: 600   # Decision should remain fast enough to schedule a handful of tasks
             image: mozillamobile/android-components:1.15
@@ -95,7 +82,6 @@ tasks:
               # The rest of the command must be defined below
             env:
               TASK_ID: ${decision_task_id}
-              TASKS_PRIORITY: ${tasks_priority}
               SCHEDULER_ID: ${scheduler_id}
               BUILD_WORKER_TYPE: ${build_worker_type}
               MOBILE_HEAD_REPOSITORY: ${repository}
@@ -119,6 +105,8 @@ tasks:
             in:
               $mergeDeep:
                 - {$eval: 'default_task_definition'}
+                #- scopes:
+                   # - secrets:get:project/focus/nimbledroid
                 - payload:
                     env:
                       GITHUB_PULL_TITLE: ${pull_request_title}
@@ -129,7 +117,10 @@ tasks:
                         && cd reference-browser
                         && git config advice.detachedHead false
                         && git checkout ${head_rev}
-                        && python automation/taskcluster/decision_task.py
+                        && python automation/taskcluster/decision_task_nightly.py \
+                          --apk geckoNightlyX86/release/app-geckoNightly-x86-release-unsigned.apk \
+                          --apk geckoNightlyArm/release/app-geckoNightly-arm-release-unsigned.apk \
+                          --apk geckoNightlyAarch64/release/app-geckoNightly-aarch64-release-unsigned.apk 
                     artifacts:
                       public/reports:
                         type: directory
@@ -151,20 +142,11 @@ tasks:
                 - scopes:
                     $flatten:
                       - project:mobile:reference-browser:releng:signing:format:autograph_apk_reference_browser
-                      - secrets:get:project/mobile/reference-browser/sentry
                       - secrets:get:project/mobile/reference-browser/nimbledroid
                       - $if: 'is_repo_trusted'
                         then:
-                          - queue:create-task:highest:scriptworker-prov-v1/mobile-signing-v1
-                          - queue:create-task:highest:scriptworker-prov-v1/mobile-pushapk-v1
-                          - project:mobile:reference-browser:releng:signing:cert:release-signing
-                          - project:mobile:reference-browser:releng:googleplay:product:reference-browser
                           - queue:route:index.project.mobile.reference-browser.signed-nightly.*
                         else:
-                          - queue:create-task:highest:scriptworker-prov-v1/mobile-signing-dep-v1
-                          - queue:create-task:highest:scriptworker-prov-v1/mobile-pushapk-dep-v1
-                          - project:mobile:reference-browser:releng:signing:cert:dep-signing
-                          - project:mobile:reference-browser:releng:googleplay:product:reference-browser:dep
                           - queue:route:index.project.mobile.reference-browser.staging-signed-nightly.*
                   payload:
                     features:
