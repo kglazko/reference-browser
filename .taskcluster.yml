@@ -34,7 +34,7 @@ tasks:
       else: ${event.repository.html_url}
 
     scheduler_id:
-      $if: 'tasks_for == "cron"'
+      $if: 'tasks_for == "github-push"'
       then: focus-nightly-sched  # TODO: Rename to mobile-nightly-sched
       else: taskcluster-github
 
