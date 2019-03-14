@@ -43,28 +43,6 @@ tasks:
       $if: 'tasks_for in ["github-push", "github-release", "cron"] && event.repository.html_url == "https://github.com/mozilla-mobile/reference-browser"'
       then: true
       else: false
-  in:
-    $let:
-      decision_worker_type:
-        $if: 'is_repo_trusted'
-        then: mobile-3-decision
-        else: mobile-1-decision
-
-      build_worker_type:
-        $if: 'is_repo_trusted'
-        then: mobile-3-b-ref-browser
-        else: mobile-1-b-ref-browser
-
-      tasks_priority:
-          $if: 'is_repo_trusted'
-          then:
-            $if: 'tasks_for == "github-release"'
-            then: highest
-            else:
-              $if: 'tasks_for == "cron"'
-              then: high
-              else: medium
-          else: lowest
     in:
       $let:
         default_task_definition:
@@ -75,12 +53,11 @@ tasks:
           deadline: {$fromNow: '2 hours'}
           expires: ${expires_in}
           provisionerId: aws-provisioner-v1
-          workerType: ${decision_worker_type}
-          priority: ${tasks_priority}
+          workerType: github-worker
           requires: all-completed   # Must be explicit because of Chain of Trust
           retries: 5
           scopes:
-            - queue:create-task:${tasks_priority}:aws-provisioner-v1/${build_worker_type}
+            - queue:create-task: aws-provisioner-v1/github-worker
             - queue:route:statuses
             - queue:scheduler-id:${scheduler_id}
           routes:
