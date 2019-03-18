@@ -47,8 +47,8 @@ tasks:
     $let:
       decision_worker_type:
         $if: 'is_repo_trusted'
-        then: mobile-1-decision
-        else: mobile-1-decision
+        then: github-worker
+        else: github-worker
 
       build_worker_type:
         $if: 'is_repo_trusted'
