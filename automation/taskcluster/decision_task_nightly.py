@@ -52,7 +52,7 @@ def generate_unit_test_task(build_task_id):
 # For GeckoView, upload nightly (it has release config) by default, all Release builds have WV
 def generate_upload_apk_nimbledroid_task(build_task_id):
     return taskcluster.slugId(), BUILDER.craft_upload_apk_nimbledroid_task(
-        unit_test_task_id,
+        build_task_id,
         name="(RB for Android) Upload Debug APK to Nimbledroid",
         description="Upload APKs to Nimbledroid for performance measurement and tracking.",
         command=('echo "--" > .adjust_token'
