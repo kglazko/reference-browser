@@ -57,6 +57,7 @@ def generate_upload_apk_nimbledroid_task(unit_test_task_id):
         description="Upload APKs to Nimbledroid for performance measurement and tracking.",
         command=('echo "--" > .adjust_token'
                  ' && ./gradlew --no-daemon clean assembleRelease'
+                 ' && cd reference-browser'
                  ' && python automation/taskcluster/upload_apk_nimbledroid.py'),
         dependencies= [unit_test_task_id],
         scopes=[],
