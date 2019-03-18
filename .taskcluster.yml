@@ -47,13 +47,13 @@ tasks:
     $let:
       decision_worker_type:
         $if: 'is_repo_trusted'
-        then: github-worker
-        else: github-worker
+        then: mobile-1-decision
+        else: mobile-1-decision
 
       build_worker_type:
         $if: 'is_repo_trusted'
-        then: github-worker
-        else: github-worker
+        then: mobile-1-b-ref-browser
+        else: mobile-1-b-ref-browser
 
     in:
       $let:
@@ -65,7 +65,7 @@ tasks:
           deadline: {$fromNow: '2 hours'}
           expires: ${expires_in}
           provisionerId: aws-provisioner-v1
-          workerType: github-worker
+          workerType: ${decision_worker_type}
           retries: 5
           scopes:
             - queue:create-task:aws-provisioner-v1/github-worker
