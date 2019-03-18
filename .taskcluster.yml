@@ -52,8 +52,8 @@ tasks:
 
       build_worker_type:
         $if: 'is_repo_trusted'
-        then: mobile-1-b-ref-browser
-        else: mobile-1-b-ref-browser
+        then: mobile-1-a-ref-browser
+        else: mobile-1-a-ref-browser
 
     in:
       $let:
