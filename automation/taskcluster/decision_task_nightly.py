@@ -57,6 +57,7 @@ def generate_upload_apk_nimbledroid_task(build_task_id):
         description="Upload APKs to Nimbledroid for performance measurement and tracking.",
         command=('echo "--" > .adjust_token'
                  ' && cd ..'
+                 '&& git clone %s'
                  ' && cd reference-browser'
                  ' && python automation/taskcluster/upload_apk_nimbledroid.py'),
         dependencies= [build_task_id],
