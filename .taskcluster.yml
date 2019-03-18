@@ -40,7 +40,7 @@ tasks:
 
     is_repo_trusted:
       # Pull requests on main repository can't be trusted because anybody can open a PR on it, without a review
-      $if: 'tasks_for in ["github-push", "github-release", "cron"] && event.repository.html_url == "https://github.com/mozilla-mobile/reference-browser"'
+      $if: 'tasks_for in ["github-push", "github-release", "cron"] && event.repository.html_url == "https://github.com/kglazko/reference-browser"'
       then: true
       else: false
   in:
@@ -68,7 +68,7 @@ tasks:
           workerType: ${decision_worker_type}
           retries: 5
           scopes:
-            - queue:create-task:aws-provisioner-v1/github-worker
+            - queue:create-task:aws-provisioner-v1/${build_worker_type}
             - queue:scheduler-id:taskcluster-github
           routes:
             #- statuses  # Automatically added by taskcluster-github. It must be explicit because of Chain of Trust
