@@ -56,7 +56,7 @@ def generate_upload_apk_nimbledroid_task(build_task_id):
         name="(RB for Android) Upload Debug APK to Nimbledroid",
         description="Upload APKs to Nimbledroid for performance measurement and tracking.",
         command=('echo "--" > .adjust_token'
-                 ' && ./gradlew --no-daemon clean assembleDebug'
+                 ' && cd ..'
                  ' && cd reference-browser'
                  ' && python automation/taskcluster/upload_apk_nimbledroid.py'),
         dependencies= [build_task_id],
