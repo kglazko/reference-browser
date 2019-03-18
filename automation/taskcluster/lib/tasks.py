@@ -171,7 +171,7 @@ class TaskBuilder(object):
             }
         }
 
-    def craft_upload_apk_nimbledroid_task(self, unit_test_task_id, name, description, command, dependencies, scopes):
+    def craft_upload_apk_nimbledroid_task(self, build_task_id, name, description, command, dependencies, scopes):
         created = datetime.datetime.now()
         expires = taskcluster.fromNow('1 year')
         deadline = taskcluster.fromNow('1 day')
@@ -186,7 +186,7 @@ class TaskBuilder(object):
             "tags": {},
             "priority": 'lowest',
             "deadline": taskcluster.stringDate(deadline),
-            "dependencies": [self.task_id, unit_test_task_id],
+            "dependencies": [self.task_id, build_task_id],
             "routes": [],
             "scopes": scopes,
             "requires": 'all-completed',

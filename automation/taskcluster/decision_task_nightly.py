@@ -50,7 +50,7 @@ def generate_unit_test_task(build_task_id):
     )
 
 # For GeckoView, upload nightly (it has release config) by default, all Release builds have WV
-def generate_upload_apk_nimbledroid_task(unit_test_task_id):
+def generate_upload_apk_nimbledroid_task(build_task_id):
     return taskcluster.slugId(), BUILDER.craft_upload_apk_nimbledroid_task(
         unit_test_task_id,
         name="(RB for Android) Upload Debug APK to Nimbledroid",
@@ -58,7 +58,7 @@ def generate_upload_apk_nimbledroid_task(unit_test_task_id):
         command=('echo "--" > .adjust_token'
                  ' && ./gradlew --no-daemon clean assembleRelease'
                  ' && python automation/taskcluster/upload_apk_nimbledroid.py'),
-        dependencies= [unit_test_task_id],
+        dependencies= [build_task_id],
         scopes=[],
 )
 
@@ -83,13 +83,13 @@ def nightly():
     task_graph[build_task_id] = {}
     task_graph[build_task_id]['task'] = queue.task(build_task_id)
 
-    unit_test_task_id, unit_test_task = generate_unit_test_task(build_task_id)
-    lib.tasks.schedule_task(queue, unit_test_task_id, unit_test_task)
+    #unit_test_task_id, unit_test_task = generate_unit_test_task(build_task_id)
+    #lib.tasks.schedule_task(queue, unit_test_task_id, unit_test_task)
 
-    task_graph[unit_test_task_id] = {}
-    task_graph[unit_test_task_id]['task'] = queue.task(unit_test_task_id)
+    #task_graph[unit_test_task_id] = {}
+    #task_graph[unit_test_task_id]['task'] = queue.task(unit_test_task_id)
 
-    upload_nd_task_id, upload_nd_task = generate_upload_apk_nimbledroid_task(unit_test_task_id)
+    upload_nd_task_id, upload_nd_task = generate_upload_apk_nimbledroid_task(build_task_id)
     lib.tasks.schedule_task(queue, upload_nd_task_id, upload_nd_task)
 
     task_graph[upload_nd_task_id] = {}
