@@ -177,7 +177,7 @@ class TaskBuilder(object):
         deadline = taskcluster.fromNow('1 day')
 
         return {
-            "workerType": 'github-worker',
+            "workerType":  self.build_worker_type,
             "taskGroupId": self.task_id,
             "schedulerId": self.scheduler_id,
             "expires": taskcluster.stringDate(expires),
