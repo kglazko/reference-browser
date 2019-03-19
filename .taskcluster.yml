@@ -131,6 +131,7 @@ tasks:
                     && git config advice.detachedHead false
                     && git checkout ${head_rev}
                     && python automation/taskcluster/decision_task_nightly.py
+                      --apk geckoNightlyX86/release/app-geckoNightly-x86-release-unsigned.apk \
           in:
             - $if: 'tasks_for == "github-pull-request" && event["action"] in ["opened", "reopened", "synchronize"]'
               then:
