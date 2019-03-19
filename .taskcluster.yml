@@ -54,6 +54,19 @@ tasks:
         $if: 'is_repo_trusted'
         then: mobile-1-a-ref-browser
         else: mobile-1-a-ref-browser
+            
+      # TODO: revisit once bug 1533314 is done to possibly infer better priorities
+      tasks_priority: highest
+
+      short_head_branch:
+        $if: 'head_branch[:10] == "refs/tags/"'
+        then: {$eval: 'head_branch[10:]'}
+        else:
+          $if: 'head_branch[:11] == "refs/heads/"'
+          then: {$eval: 'head_branch[11:]'}
+          else: ${head_branch}
+
+       assume_scope_prefix: assume:repo:github.com/${github_repository_full_name}
 
     in:
       $let:
@@ -105,8 +118,8 @@ tasks:
             in:
               $mergeDeep:
                 - {$eval: 'default_task_definition'}
-                #- scopes:
-                   # - secrets:get:project/focus/nimbledroid
+                - scopes:
+                    - ${assume_scope_prefix}:branch:${short_head_branch}
                 - payload:
                     env:
                       GITHUB_PULL_TITLE: ${pull_request_title}
