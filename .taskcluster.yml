@@ -134,8 +134,7 @@ tasks:
                       --commit \
                       --output app/build/outputs/apk \
                       --apk geckoNightlyX86/release/app-geckoNightly-x86-release-unsigned.apk \
-                      --date ${now} \
-                      ${command_staging_flag}
+                      --date ${now}
           in:
             - $if: 'tasks_for == "github-pull-request" && event["action"] in ["opened", "reopened", "synchronize"]'
               then:
