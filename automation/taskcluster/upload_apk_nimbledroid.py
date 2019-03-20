@@ -10,7 +10,7 @@ Nimbledroid account key and upload Klar and Focus apk to Nimbledroid for perf an
 import taskcluster
 import requests
 import json
-import urllib2
+#import urllib2
 
 url = "https://nimbledroid.com/api/v2/apks"
 
