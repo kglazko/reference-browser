@@ -60,7 +60,7 @@ def generate_upload_apk_nimbledroid_task(build_task_id):
                  'cd .. && ' + checkout +
                  ' && python automation/taskcluster/upload_apk_nimbledroid.py'),
         dependencies= [build_task_id],
-        scopes=[],
+        scopes=["secrets:get:project/mobile/reference-browser/nimbledroid"],
 )
 
 

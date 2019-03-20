@@ -171,7 +171,7 @@ class TaskBuilder(object):
             }
         }
 
-    def craft_upload_apk_nimbledroid_task(self, build_task_id, name, description, command, dependencies, scopes):
+    def craft_upload_apk_nimbledroid_task(self, build_task_id, name, description, command, dependencies, scopes=[]):
         created = datetime.datetime.now()
         expires = taskcluster.fromNow('1 year')
         deadline = taskcluster.fromNow('1 day')
