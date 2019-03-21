@@ -46,6 +46,8 @@ data = secrets.get('project/mobile/reference-browser/nimbledroid')
 #rb_file = {'apk': open(os.path.join(os.path.dirname(__file__), '../../app/build/outputs/apk/geckoNightlyArm/debug/app-geckoNightly-arm-debug.apk'))}
 # focus_file = {'apk': open('app/build/outputs/apk/focusArm/release/app-focus-arm-release-unsigned.apk')}
 
+cwd = os.getcwd()
+print cwd
 # also upload the latest geckoview example from:
 #uploadApk(rb_file, data['secret']['api_key'])
 uploadGeckoViewExampleApk(data['secret']['api_key'])
