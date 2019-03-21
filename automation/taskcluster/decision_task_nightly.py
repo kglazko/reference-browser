@@ -124,4 +124,4 @@ if __name__ == "__main__":
 
     result = parser.parse_args()
     apks = ["{}/{}".format(result.track, apk) for apk in result.apks]
-    nightly()
+    nightly(apks, result.commit, result.date)
