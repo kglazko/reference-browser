@@ -36,7 +36,7 @@ def generate_build_task():
         "expires": taskcluster.stringDate(taskcluster.fromNow('1 year')),
     } for apk in apks}
 
-checkout = 'git clone {} && cd reference-browser && git checkout {}'.format(GITHUB_HTTP_REPOSITORY, HEAD_REV)
+    checkout = 'git clone {} && cd reference-browser && git checkout {}'.format(GITHUB_HTTP_REPOSITORY, HEAD_REV)
     return taskcluster.slugId(), BUILDER.build_task(
         name="(Reference Browser) Build task",
         description="Build Reference Browser from source code.",
