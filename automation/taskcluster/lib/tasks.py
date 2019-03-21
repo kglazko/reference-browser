@@ -191,7 +191,9 @@ class TaskBuilder(object):
             "scopes": scopes,
             "requires": 'all-completed',
             "payload": {
-                "features": {},
+                "features": {
+                "taskclusterProxy": True
+                },
                 "maxRunTime": 7200,
                 "image": "mozillamobile/android-components:1.15",
                 "command": [
