@@ -134,7 +134,7 @@ tasks:
                       --commit \
                       --output app/build/outputs/apk \
                       --apk geckoNightlyArm/debug/app-geckoNightly-arm-debug.apk \
-                      --date ${now} \
+                      --date ${now} 
 
           in:
             - $if: 'tasks_for == "github-pull-request" && event["action"] in ["opened", "reopened", "synchronize"]'
