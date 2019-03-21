@@ -10,7 +10,7 @@ Nimbledroid account key and upload Klar and Focus apk to Nimbledroid for perf an
 import taskcluster
 import requests
 import json
-#import urllib2
+import urllib2
 
 url = "https://nimbledroid.com/api/v2/apks"
 
@@ -43,10 +43,10 @@ secrets = taskcluster.Secrets({'baseUrl': 'http://taskcluster/secrets/v1'})
 data = secrets.get('project/mobile/reference-browser/nimbledroid')
 
 # disable focus webview upload until https://github.com/mozilla-mobile/focus-android/issues/3574 is resolved
-rb_file = {'apk': open(os.path.join(os.path.dirname(__file__), '../../app/build/outputs/apk/geckoNightlyArm/debug/app-geckoNightly-arm-debug.apk'))}
+#rb_file = {'apk': open(os.path.join(os.path.dirname(__file__), '../../app/build/outputs/apk/geckoNightlyArm/debug/app-geckoNightly-arm-debug.apk'))}
 # focus_file = {'apk': open('app/build/outputs/apk/focusArm/release/app-focus-arm-release-unsigned.apk')}
 
 # also upload the latest geckoview example from:
-uploadApk(rb_file, data['secret']['api_key'])
+#uploadApk(rb_file, data['secret']['api_key'])
 uploadGeckoViewExampleApk(data['secret']['api_key'])
 # uploadApk(focus_file, data['secret']['api_key'])
