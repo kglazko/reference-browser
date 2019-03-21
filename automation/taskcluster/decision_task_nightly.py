@@ -29,7 +29,7 @@ BUILDER = lib.tasks.TaskBuilder(
 )
 
 
-def generate_build_task():
+def generate_build_task(apks):
     artifacts = {'public/{}'.format(os.path.basename(apk)): {
         "type": 'file',
         "path": "/build/reference-browser/{}".format(apk),
