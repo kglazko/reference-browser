@@ -30,6 +30,13 @@ BUILDER = lib.tasks.TaskBuilder(
 
 
 def generate_build_task():
+    artifacts = {'public/{}'.format(os.path.basename(apk)): {
+        "type": 'file',
+        "path": "/build/reference-browser/{}".format(apk),
+        "expires": taskcluster.stringDate(taskcluster.fromNow('1 year')),
+    } for apk in apks}
+
+checkout = 'git clone {} && cd reference-browser && git checkout {}'.format(GITHUB_HTTP_REPOSITORY, HEAD_REV)
     return taskcluster.slugId(), BUILDER.build_task(
         name="(Reference Browser) Build task",
         description="Build Reference Browser from source code.",
@@ -73,12 +80,12 @@ def populate_chain_of_trust_required_but_unused_files():
             json.dump({}, f)
 
 
-def nightly():
+def nightly(apks, commit, date_string):
     queue = taskcluster.Queue({'baseUrl': 'http://taskcluster/queue/v1'})
 
     task_graph = {}
 
-    build_task_id, build_task = generate_build_task()
+    build_task_id, build_task = generate_build_task(apks)
     lib.tasks.schedule_task(queue, build_task_id, build_task)
 
     task_graph[build_task_id] = {}
@@ -105,4 +112,16 @@ def nightly():
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description='Create a release pipeline (build, sign, publish) on taskcluster.')
+
+    parser.add_argument('--commit', dest="commit", action="store_true", help="commit the google play transaction")
+    parser.add_argument('--apk', dest="apks", metavar="path", action="append", help="Path to APKs to sign and upload",
+                        required=True)
+    parser.add_argument('--output', dest="track", metavar="path", action="store", help="Path to the build output",
+                        required=True)
+    parser.add_argument('--date', dest="date", action="store", help="ISO8601 timestamp for build")
+
+    result = parser.parse_args()
+    apks = ["{}/{}".format(result.track, apk) for apk in result.apks]
     nightly()
