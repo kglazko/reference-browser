@@ -44,12 +44,15 @@ secrets = taskcluster.Secrets({'baseUrl': 'http://taskcluster/secrets/v1'})
 data = secrets.get('project/mobile/reference-browser/nimbledroid')
 
 # disable focus webview upload until https://github.com/mozilla-mobile/focus-android/issues/3574 is resolved
-rb_file = {'apk': open('app/build/outputs/apk/geckoNightlyArm/debug/app-geckoNightly-arm-debug.apk')}
-# focus_file = {'apk': open('app/build/outputs/apk/focusArm/release/app-focus-arm-release-unsigned.apk')}
+rb_file_x86 = {'apk': open('app/build/outputs/apk/geckoNightlyX86/release/app-geckoNightly-x86-release-unsigned.apk')}
+rb_file_arm = {'apk': open('app/build/outputs/apk/geckoNightlyArm/release/app-geckoNightly-arm-release-unsigned.apk')}
+rb_file_aarch64 = {'apk': open('geckoNightlyAarch64/release/app-geckoNightly-aarch64-release-unsigned.apk')}
 
 cwd = os.getcwd()
 print cwd
 # also upload the latest geckoview example from:
-uploadApk(rb_file, data['secret']['api_key'])
+uploadApk(rb_file_x86, data['secret']['api_key'])
+uploadApk(rb_file_arm, data['secret']['api_key'])
+uploadApk(rb_file_aarch64, data['secret']['api_key'])
 uploadGeckoViewExampleApk(data['secret']['api_key'])
 # uploadApk(focus_file, data['secret']['api_key'])
