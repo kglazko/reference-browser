@@ -31,19 +31,10 @@ def uploadApk(apk,key):
 	print('Reponse Payload:')
 	print json.dumps(response.json(), indent=4)
 
-'''def uploadGeckoViewExampleApk(key):
-		apk_url = 'https://index.taskcluster.net/v1/task/gecko.v2.mozilla-central.latest.mobile.android-api-16-opt/artifacts/public/build/geckoview_example.apk'
-
-	apk_data = urllib2.urlopen(apk_url).read()
-	with open('./geckoview_example_nd.apk', 'wb') as f:
-    		f.write(apk_data)
-	uploadApk({'apk' : open('geckoview_example_nd.apk')},key)'''
-
 # Get JSON data from taskcluster secrets service
 secrets = taskcluster.Secrets({'baseUrl': 'http://taskcluster/secrets/v1'})
 data = secrets.get('project/mobile/reference-browser/nimbledroid')
 
-# disable focus webview upload until https://github.com/mozilla-mobile/focus-android/issues/3574 is resolved
 rb_file_arm = {'apk': open('app/build/outputs/apk/geckoNightlyArm/debug/app-geckoNightly-arm-debug.apk')}
 
 cwd = os.getcwd()
