@@ -31,28 +31,22 @@ def uploadApk(apk,key):
 	print('Reponse Payload:')
 	print json.dumps(response.json(), indent=4)
 
-def uploadGeckoViewExampleApk(key):
-	apk_url = 'https://index.taskcluster.net/v1/task/gecko.v2.mozilla-central.latest.mobile.android-api-16-opt/artifacts/public/build/geckoview_example.apk'
+'''def uploadGeckoViewExampleApk(key):
+		apk_url = 'https://index.taskcluster.net/v1/task/gecko.v2.mozilla-central.latest.mobile.android-api-16-opt/artifacts/public/build/geckoview_example.apk'
 
 	apk_data = urllib2.urlopen(apk_url).read()
 	with open('./geckoview_example_nd.apk', 'wb') as f:
     		f.write(apk_data)
-	uploadApk({'apk' : open('geckoview_example_nd.apk')},key)
+	uploadApk({'apk' : open('geckoview_example_nd.apk')},key)'''
 
 # Get JSON data from taskcluster secrets service
 secrets = taskcluster.Secrets({'baseUrl': 'http://taskcluster/secrets/v1'})
 data = secrets.get('project/mobile/reference-browser/nimbledroid')
 
 # disable focus webview upload until https://github.com/mozilla-mobile/focus-android/issues/3574 is resolved
-rb_file_x86 = {'apk': open('app/build/outputs/apk/geckoNightlyX86/debug/app-geckoNightly-x86-debug.apk')}
 rb_file_arm = {'apk': open('app/build/outputs/apk/geckoNightlyArm/debug/app-geckoNightly-arm-debug.apk')}
-rb_file_aarch64 = {'apk': open('app/build/outputs/apk/geckoNightlyAarch64/debug/app-geckoNightly-aarch64-debug.apk')}
 
 cwd = os.getcwd()
 print cwd
 # also upload the latest geckoview example from:
-uploadApk(rb_file_x86, data['secret']['api_key'])
 uploadApk(rb_file_arm, data['secret']['api_key'])
-uploadApk(rb_file_aarch64, data['secret']['api_key'])
-uploadGeckoViewExampleApk(data['secret']['api_key'])
-# uploadApk(focus_file, data['secret']['api_key'])
