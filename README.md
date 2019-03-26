@@ -60,7 +60,7 @@ Before you attempt to make a contribution please read the [Community Participati
 
 # Local Development
 
-## Dependency substitutions
+## Dependency substitutions..
 
 You might be interested in building this project against local versions of some of the dependencies.
 This could be done either by using a [local maven repository](https://mozilla-mobile.github.io/android-components/contributing/testing-components-inside-app) (quite cumbersome), or via Gradle's [dependency substitutions](https://docs.gradle.org/current/userguide/customizing_dependency_resolution_behavior.html) (not at all cumbersome!).
